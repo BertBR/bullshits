@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>CSV Upload Form</title>
+</head>
+
+<body>
+  <form>
+    <input type="file" id="csvFile" accept=".csv">
+    <button id="btnUpload" type="button" onclick="handleUpload()">Upload</button>
+  </form>
+</body>
+
+</html>
+
+<script>
+  function handleUpload() {
+    var fileInput = document.getElementById('csvFile');
+    var file = fileInput.files[0];
+
+    if (file && file.type === 'text/csv') {
+      var formData = new FormData();
+      formData.append('file', file);
+
+      sendDataToBackend(formData);
+    } else {
+      alert('Only CSV files are allowed');
+    }
+  }
+
+  function checkFile() {
+    var file = document.getElementById("fileToUpload").value;
+    var ext = file.split(".");
+    ext = ext[ext.length - 1].toLowerCase();
+    var arrayExtensions = ["csv"];
+    if (arrayExtensions.lastIndexOf(ext) == -1) {
+      alert("Wrong extension type.");
+      document.getElementById("fileToUpload").value = "";
+      return false;
+    }
+  }
+
+  function sendDataToBackend(formData) {
+    // Perform POST request to send formData to the backend
+    // You can use AJAX, Fetch API, or any other method to send the data
+
+    // Example using Fetch API
+    fetch('http://localhost:3000/upload', {
+      method: 'POST',
+      body: formData
+    })
+      .then(response => {
+        if (response.ok) {
+          // Request succeeded
+          alert('Data uploaded successfully');
+          // Handle any further actions or responses from the backend
+        } else {
+          // Request failed
+          alert('Data upload failed');
+          // Handle the error or display an error message
+        }
+      })
+      .catch(error => {
+        console.log(error)
+        alert('An error occurred, see console for details');
+        // Handle the error or display an error message
+      });
+  }
+</script>
+
+<style>
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  input {
+    margin: 10px;
+  }
+
+ #btnUpload {
+    width: 100px;
+    height: 30px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+</style>
